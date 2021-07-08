@@ -20,13 +20,23 @@ class ASSET_TRACKARE_PT_globalTools(bpy.types.Panel):
     def draw(self, context):
         data_prop = context.scene.Moonshine_AssetTracking
         layout = self.layout
-        row = layout.row(align=True)
+        layout.use_property_decorate = False 
+        box = layout.box()
+        row = box.row(align=True)
+        row.operator("file.find_missing_files", text = "Find Missing")
         row.operator("file.make_paths_absolute", text = "Absolute path")
         row.operator("file.make_paths_relative", text = "Relative path")
-        row.operator("moonshine.asset_manager", text = "Fix Map Node Name").button = "fix map name"
-        row = layout.row(align=True)
-        row.operator("file.find_missing_files", text = "Find Missing")
-        row.operator("asset_tracking.collect_textures", text = "Collect images")
+        row.operator("asset_tracking.fix_map_node", text = "Fix Map Name")
+        box = layout.box()
+        row = box.row(align=True)
+        split = row.split(factor=0.25, align=True)
+        split.operator("asset_tracking.collect_textures", text = "Collect images")
+        split.prop(data_prop, "image_folder", text="")
+        row = box.row(align=True)
+        split = row.split(factor=0.25, align=True)
+        split.prop(data_prop, "image_proxy", text="Make Proxy")
+        split.prop(data_prop, "image_proxy_size", text="")
+        
 
 class ASSET_TRACKING_PT_textures(bpy.types.Panel):
     bl_label = "Image Manager"
@@ -99,6 +109,7 @@ class ASSET_TRACKING_UL_ImageList(bpy.types.UIList):
 class ASSET_TRACKING_UL_LinkedList(bpy.types.UIList):
     
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
+        data_prop = context.scene.Moonshine_AssetTracking
         if self.layout_type in {'DEFAULT', 'COMPACT'}:
             abspath = bpy.path.abspath(item.filepath)
             file_icon = {True:"FILE", False:"LIBRARY_DATA_BROKEN"}

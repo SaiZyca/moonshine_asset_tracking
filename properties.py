@@ -22,6 +22,17 @@ class AssetTracing_Properties(PropertyGroup):
     image_column_packed_file: BoolProperty(default= False)
     image_column_filepath: BoolProperty(default= True)
     image_folder: StringProperty(default="//", subtype="DIR_PATH")
+    image_proxy: BoolProperty(default= False)
+    image_proxy_size: EnumProperty(
+        name = "proxy size",
+        description= "scale texture size",
+        items = (
+            ("100", "100%", "100%"),
+            ("50", "50%", "50%"),
+            ("25", "25%", "25%"),
+        ),
+        default="100"
+        )
     linked_list_index: IntProperty(default=-1)
     linked_file_folder: StringProperty(default="//", subtype="DIR_PATH")
 
