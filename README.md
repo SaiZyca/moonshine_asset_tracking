@@ -4,5 +4,5 @@ Manage exterior files link in blender
 
 ## todo 
 
-* Texture collect with scale for proxy use 
-* 
+- [x] Texture collect with scale for proxy use 
+- [x] switch proxy 
