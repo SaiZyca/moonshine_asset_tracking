@@ -26,29 +26,38 @@ class ASSET_TRACKING_OT_collectTextures(bpy.types.Operator):
         new_folder = bpy.path.abspath(data_prop.image_folder)
 
         if data_prop.image_proxy:
-            sub_folder =  data_prop.image_proxy_size + "%/"
-            ratio = int(data_prop.image_proxy_size)/100
-            new_folder = new_folder + sub_folder 
-            copy_image(new_folder)
-            scale_image(ratio)
+            if data_prop.image_proxy_size != "100":
+                sub_folder =  data_prop.image_proxy_size + "%/"
+                ratio = int(data_prop.image_proxy_size)/100
+                new_folder = new_folder + sub_folder 
+                copy_image(new_folder)
+                scale_image(ratio)
         else:
-            change_3dview_shade()
-            # self.copy_image(new_folder)
+            # change_3dview_shade()
+            copy_image(new_folder)
 
         return {"FINISHED"}
 
 def scale_image(ratio):
     message = "Success"
     images = bpy.data.images
+    progress = bpy.context.window_manager
+    progress.progress_begin(0, len(images))
+    count = 1
     try:
         for image in images:
             image_path = bpy.path.abspath(image.filepath)
             if os.path.exists(image_path):
                 image.scale(image.size[0]*ratio, image.size[1]*ratio)
                 image.save()
-            
+
+            progress.progress_update(count)
+            count += 1
+
     except Exception as e:
         message = "Execute Error:%s" % (e)
+
+    progress.progress_end()
 
     return message
 
@@ -60,16 +69,24 @@ def copy_image(new_folder):
         os.mkdir(new_folder)
 
     images = bpy.data.images
+    progress = bpy.context.window_manager
+    progress.progress_begin(0, len(images))
+    count = 1
     try:
         for image in images:
             image_path = bpy.path.abspath(image.filepath)
             if os.path.exists(image_path):
                 new_path = shutil.copy(image_path, new_folder)
                 image.filepath = new_path
-            
+
+            progress.progress_update(count)
+            count += 1
+
     except Exception as e:
         message = "Execute Error:%s" % (e)
-    
+
+    progress.progress_end()
+
     return message
 
 

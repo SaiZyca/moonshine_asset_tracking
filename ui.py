@@ -35,6 +35,7 @@ class ASSET_TRACKARE_PT_globalTools(bpy.types.Panel):
         row = box.row(align=True)
         split = row.split(factor=0.25, align=True)
         split.prop(data_prop, "image_proxy", text="Make Proxy")
+        split.prop(data_prop, "image_proxy_switch", text="Switch Proxy")
         split.prop(data_prop, "image_proxy_size", text="")
         
 
